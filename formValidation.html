@@ -1,0 +1,168 @@
+<html>
+<head>
+    <title>Document</title>
+    <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+    
+    <style type="text/css">
+        body {
+            font-family: helvetica, sans-serif;
+            font-size: 130%;
+        }
+        
+        input {
+            height: 40px;
+        }
+        
+        label {
+/*            display: inline-block;*/
+            top: 16;
+            position: relative;
+            /* width does not work on label if no float left */
+            float: left;
+            width: 180px;
+        }
+        
+        input {
+            width: 300px;
+            height: 55px;
+            padding: 5px;
+            font-size: 20px;
+            border: 1px solid #e2e9ee;
+            border-radius: 3px;
+            font-weight: bold;
+            
+            
+        }
+        
+        .form-element {
+            margin-bottom: 20px;
+        }
+        
+        #centre-div {
+            /* centering div horizontally */
+            width: 550px;
+            margin:0 auto;
+        }
+        
+        #sign-up {
+            margin-left: 180px;
+            width: 200px;
+            background-color: #1997f0;
+            color: white;
+            border: none;
+        }
+        
+        /* pseudo element available on moder browsers */
+        ::placeholder {
+            color: #a0afba;
+            font-weight: normal;
+            
+        }
+        
+        #errors {
+            font-size: 60%;
+            color: red;
+        }
+        
+        #success {
+            display: none;
+            font-size: 80%;
+            background-color: #efffcc;
+            color: #699900;
+            margin-bottom: 10px;
+            height: 45px;
+            /* centre text horizontally and vertically inside div */
+            text-align: center;
+            vertical-align: middle;
+            line-height: 45px;
+        }
+    
+    </style>
+    
+</head>
+<body>
+    <div id="centre-div">
+        <div id="form-element">
+            <h2>Create Account</h2>
+        </div>
+        <div id="errors"></div>
+        <div id="success">Sign Up success</div>
+        <div class="form-element">
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" placeholder="eg. yourname@gmail.com">
+        </div>
+
+        <div class="form-element">
+            <label for="tel">Telephone</label>
+            <input type="text" name="tel" id="tel" placeholder="eg. 0123456789">
+        </div>
+
+        <div class="form-element">
+            <label for="pass">Password</label>
+            <input type="password" name="pass" id="pass" >
+        </div>
+
+        <div class="form-element">
+            <label for="con-pass">Confirm Password</label>
+            <input type="password" name="con-pass" id="con-pass" >
+        </div>
+        <div class="form-element">
+            <input type="submit" value="SIGN UP" id="sign-up" >
+        </div>
+    </div>
+    
+    
+    <script type="text/javascript">
+        function isValidEmailAddress(emailAddress) {
+            var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+            return pattern.test(emailAddress);
+        }
+        $("#sign-up").click(function() {
+            var email = $("#email").val();
+            var tel = $("#tel").val();
+            var password = $("#pass").val();
+            var conPass = $("#con-pass").val();
+            var errorMessage = "";
+            var missing = "";
+            var successMessage = "Sign Up success";
+            
+            if (isValidEmailAddress(email) == false) {
+                errorMessage += "<p>Your email address is not valid</p>";
+            }
+            
+            if ($.isNumeric(tel) == false) {
+                errorMessage += "<p>Your telephone is not numeric</p>";
+            }
+            
+            if (password != conPass) {
+                errorMessage += "<p>Your passwords do not match</p>";
+            }
+            
+            // missing fields
+            if (email == "") {
+                missing += "<br>Email";
+            }
+            if (tel == "") {
+                missing += "<br>Telephone";
+            }
+            if (password == "") {
+                missing += "<br>Password";
+            }
+            if (conPass == "") {
+                missing += "<br>Confirm Password";
+            }
+            if (missing != "") {
+                errorMessage += "The following field(s) are missing: " + missing;
+            }
+            if (errorMessage == "") {
+                $("#success").show();
+            } else {
+                $("#errors").html(errorMessage);
+                $("#success").hide();
+            }
+            
+        });
+    </script>
+    
+</body>
+</html>
